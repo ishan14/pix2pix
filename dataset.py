@@ -18,8 +18,9 @@ class MapDataset(Dataset):
         img_file = self.list_files[index]
         img_path = os.path.join(self.root_dir, img_file)
         image = np.array(Image.open(img_path))
-        input_image = image[:, :600, :]
-        target_image = image[:, 600:, :]
+        (h, w, c) = image.shape
+        target_image = image[:, :w//2, :]
+        input_image = image[:, w//2:, :]
 
         augmentations = config.both_transform(image=input_image, image0=target_image)
         input_image = augmentations["image"]

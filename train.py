@@ -18,6 +18,9 @@ def train_fn(
 ):
     loop = tqdm(loader, leave=True)
 
+    running_gen_loss = 0
+    running_disc_loss = 0
+
     for idx, (x, y) in enumerate(loop):
         x = x.to(config.DEVICE)
         y = y.to(config.DEVICE)
@@ -43,6 +46,9 @@ def train_fn(
             L1 = l1_loss(y_fake, y) * config.L1_LAMBDA
             G_loss = G_fake_loss + L1
 
+        running_gen_loss += G_loss.item() * x.size(0)
+        running_disc_loss += D_loss.item() * x.size(0)
+
         opt_gen.zero_grad()
         g_scaler.scale(G_loss).backward()
         g_scaler.step(opt_gen)
@@ -53,6 +59,8 @@ def train_fn(
                 D_real=torch.sigmoid(D_real).mean().item(),
                 D_fake=torch.sigmoid(D_fake).mean().item(),
             )
+
+    return running_gen_loss, running_disc_loss
 
 
 def main():
@@ -83,8 +91,11 @@ def main():
     val_dataset = MapDataset(root_dir=config.VAL_DIR)
     val_loader = DataLoader(val_dataset, batch_size=1, shuffle=False)
 
+    gen_loss_list = []
+    disc_loss_list = []
+
     for epoch in range(config.NUM_EPOCHS):
-        train_fn(
+        gen_loss, disc_loss = train_fn(
             disc, gen, train_loader, opt_disc, opt_gen, L1_LOSS, BCE, g_scaler, d_scaler,
         )
 
@@ -93,6 +104,19 @@ def main():
             save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_DISC)
 
         save_some_examples(gen, val_loader, epoch, folder="evaluation")
+
+        gen_loss_list.append(gen_loss)
+        disc_loss_list.append(disc_loss)
+
+    try:
+        print("[WRITE] Appending losses to results.txt")
+        with open(r'results.txt', 'w') as fp:
+            for gl, dl in zip(gen_loss_list, disc_loss_list):
+                fp.write(f'{gl},{dl}')
+
+        fp.close()
+    except:
+        pass
 
 
 if __name__ == "__main__":
