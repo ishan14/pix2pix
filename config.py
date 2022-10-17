@@ -19,7 +19,7 @@ L1_LAMBDA = 100
 LAMBDA_GP = 10
 NUM_EPOCHS = opt.n_epochs
 LOAD_MODEL = opt.load_model
-SAVE_MODEL = opt.save_model
+SAVE_MODEL = 
 CHECKPOINT_DISC = "disc.pth.tar"
 CHECKPOINT_GEN = "gen.pth.tar"
 
