@@ -20,8 +20,16 @@ LAMBDA_GP = 10
 NUM_EPOCHS = opt.n_epochs
 LOAD_MODEL = opt.load_model
 SAVE_MODEL = 
-CHECKPOINT_DISC = "disc.pth.tar"
-CHECKPOINT_GEN = "gen.pth.tar"
+CHECKPOINT_DISC = opt.disc_path
+CHECKPOINT_GEN = opt.gen_path
+LOSS_FILE = "results.txt"
+
+resume_epoch = CHECKPOINT_DISC.split("_")[0]
+if resume_epoch not in ["gen", "disc"]:
+    START_EPOCH = int(resume_epoch)
+else:
+    START_EPOCH = 0
+
 
 both_transform = A.Compose(
     [A.Resize(width=256, height=256),], additional_targets={"image0": "image"},

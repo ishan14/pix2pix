@@ -1,6 +1,7 @@
 import torch
 import config
 from torchvision.utils import save_image
+import os 
 
 def save_some_examples(gen, val_loader, epoch, folder):
     x, y = next(iter(val_loader))
@@ -16,12 +17,13 @@ def save_some_examples(gen, val_loader, epoch, folder):
     gen.train()
 
 
-def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
+def save_checkpoint(model, optimizer, epoch_val, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
     checkpoint = {
         "state_dict": model.state_dict(),
         "optimizer": optimizer.state_dict(),
     }
+    filename = str(epoch) + "_" + filename # Adding epoch information to model file
     torch.save(checkpoint, filename)
 
 
@@ -35,5 +37,8 @@ def load_checkpoint(checkpoint_file, model, optimizer, lr):
     # and it will lead to many hours of debugging \:
     for param_group in optimizer.param_groups:
         param_group["lr"] = lr
+
+
+
 
 

@@ -94,14 +94,14 @@ def main():
     gen_loss_list = []
     disc_loss_list = []
 
-    for epoch in range(config.NUM_EPOCHS):
+    for epoch in range(config.START_EPOCH, config.NUM_EPOCHS):
         gen_loss, disc_loss = train_fn(
             disc, gen, train_loader, opt_disc, opt_gen, L1_LOSS, BCE, g_scaler, d_scaler,
         )
 
         if config.SAVE_MODEL and epoch % 5 == 0:
-            save_checkpoint(gen, opt_gen, filename=config.CHECKPOINT_GEN)
-            save_checkpoint(disc, opt_disc, filename=config.CHECKPOINT_DISC)
+            save_checkpoint(gen, opt_gen, epoch, filename=config.CHECKPOINT_GEN)
+            save_checkpoint(disc, opt_disc, epoch, filename=config.CHECKPOINT_DISC)
 
         save_some_examples(gen, val_loader, epoch, folder="evaluation")
 
@@ -112,7 +112,9 @@ def main():
         print("[WRITE] Appending losses to results.txt")
         with open(r'results.txt', 'w') as fp:
             for gl, dl in zip(gen_loss_list, disc_loss_list):
-                fp.write(f'{gl},{dl}')
+                data = f'{time.ctime(time.time())},{epoch},{gl},{dl}'
+                fp.write(data)
+                fp.write("\n")
 
         fp.close()
     except:

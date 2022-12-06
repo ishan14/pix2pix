@@ -37,6 +37,8 @@ def get_args():
     parser.add_argument('--n_edf', type=int , default = "16", help="Feature maps in first encoder-decoder layer")
     parser.add_argument('--n_df', type=int , default = "64", help="Feature maps in first Discriminator layer")
     parser.add_argument('--data_path', type=str, help="Dataset Root Directory" , default= "./trainDataset")
+    parser.add_argument('--gen_path', type=str, help="Saved generator model", default = "gen.pth.tar")
+    parser.add_argument('--disc_path', type=str, help="Saved discriminator model", default = "disc.pth.tar")
 
     args = parser.parse_args()
     return args
