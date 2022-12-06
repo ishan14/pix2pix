@@ -23,7 +23,8 @@ def save_checkpoint(model, optimizer, epoch_val, filename="my_checkpoint.pth.tar
         "state_dict": model.state_dict(),
         "optimizer": optimizer.state_dict(),
     }
-    filename = str(epoch) + "_" + filename # Adding epoch information to model file
+    # filename = str(epoch_val) + "_" + filename # Adding epoch information to model file
+    filename = str(epoch_val) + "_" + filename
     torch.save(checkpoint, filename)
 
 

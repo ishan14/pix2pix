@@ -23,10 +23,13 @@ SAVE_MODEL = opt.save_model
 CHECKPOINT_DISC = opt.disc_path
 CHECKPOINT_GEN = opt.gen_path
 LOSS_FILE = "results.txt"
+GEN_SAVE_NAME = "gen.pth.tar"
+DISC_SAVE_NAME = "disc.pth.tar"
 
-resume_epoch = CHECKPOINT_DISC.split("_")[0]
-if resume_epoch not in ["gen", "disc"]:
-    START_EPOCH = int(resume_epoch)
+
+info = CHECKPOINT_DISC.split("_")
+if len(info) > 1:
+    START_EPOCH = int(info[0])
 else:
     START_EPOCH = 0
 
