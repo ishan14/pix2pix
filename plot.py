@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.ticker import FormatStrFormatter
 
-f = open("results.txt", "r")
+f = open("combined_result.txt", "r")
 
 ff = f.readlines()
 
@@ -16,7 +16,7 @@ for values in ff:
 
 
 gen_loss = [float('%.3f'%(i/3207)) for i in gen_loss]
-disc_loss = [float('%.3f'%(round(i, 3)/1000)) for i in disc_loss]
+disc_loss = [float('%.3f'%(round(i, 3)/3207)) for i in disc_loss]
 
 fig, ax = plt.subplots(1, 2, figsize=(30, 30))
 ax[0].plot(np.array(gen_loss), label = "Generator Loss", color = "green")

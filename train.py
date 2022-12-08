@@ -95,7 +95,7 @@ def main():
     gen_loss_list = []
     disc_loss_list = []
 
-    for epoch in range(config.START_EPOCH, config.NUM_EPOCHS):
+    for epoch in range(config.START_EPOCH, config.START_EPOCH + config.NUM_EPOCHS):
         gen_loss, disc_loss = train_fn(
             disc, gen, train_loader, opt_disc, opt_gen, L1_LOSS, BCE, g_scaler, d_scaler,
         )
